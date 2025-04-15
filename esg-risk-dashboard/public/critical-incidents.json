@@ -1,0 +1,39 @@
+{
+    "companyId": "demo-company-123",
+    "companyName": "Acme Corporation",
+    "criticalIncidents": [
+        {
+            "id": "incident-456",
+            "title": "Emissions Reporting Violation",
+            "date": "2023-10-15T14:30:00Z",
+            "category": "environmental",
+            "severity": "high",
+            "description": "Company fined $1.5M for misreporting carbon emissions",
+            "location": "Frankfurt, Germany",
+            "riskScoreImpact": 8.2,
+            "summary": "Regulatory authorities imposed a substantial fine for deliberate manipulation of emissions reporting data, affecting the company's environmental risk score."
+        },
+        {
+            "id": "incident-460",
+            "title": "Data Privacy Breach",
+            "date": "2023-11-02T08:15:00Z",
+            "category": "governance",
+            "severity": "critical",
+            "description": "Customer data breach affecting 100,000+ users",
+            "location": "Global",
+            "riskScoreImpact": 12.7,
+            "summary": "A major data breach exposed sensitive customer information, triggering regulatory investigations in multiple jurisdictions."
+        },
+        {
+            "id": "incident-470",
+            "title": "Conflict Minerals Audit",
+            "date": "2023-11-10T09:45:00Z",
+            "category": "social",
+            "severity": "medium",
+            "description": "Audit finds insufficient diligence on conflict minerals in supply chain",
+            "location": "Global Supply Chain",
+            "riskScoreImpact": 3.6,
+            "summary": "Third-party audit revealed inadequate screening for conflict minerals, raising concerns about human rights implications in the supply chain."
+        }
+    ]
+}

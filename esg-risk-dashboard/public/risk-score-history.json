@@ -1,0 +1,196 @@
+{
+    "companyId": "demo-company-123",
+    "companyName": "Acme Corporation",
+    "interval": "weekly",
+    "data": [
+        {
+            "date": "2023-05-18",
+            "overall": 52,
+            "environmental": 48,
+            "social": 61,
+            "governance": 47
+        },
+        {
+            "date": "2023-05-25",
+            "overall": 53,
+            "environmental": 50,
+            "social": 60,
+            "governance": 49
+        },
+        {
+            "date": "2023-06-01",
+            "overall": 54,
+            "environmental": 51,
+            "social": 60,
+            "governance": 51
+        },
+        {
+            "date": "2023-06-08",
+            "overall": 55,
+            "environmental": 53,
+            "social": 59,
+            "governance": 53
+        },
+        {
+            "date": "2023-06-15",
+            "overall": 56,
+            "environmental": 55,
+            "social": 58,
+            "governance": 55
+        },
+        {
+            "date": "2023-06-22",
+            "overall": 55,
+            "environmental": 54,
+            "social": 57,
+            "governance": 54
+        },
+        {
+            "date": "2023-06-29",
+            "overall": 54,
+            "environmental": 52,
+            "social": 58,
+            "governance": 52
+        },
+        {
+            "date": "2023-07-05",
+            "overall": 53,
+            "environmental": 50,
+            "social": 59,
+            "governance": 50
+        },
+        {
+            "date": "2023-07-13",
+            "overall": 55,
+            "environmental": 52,
+            "social": 60,
+            "governance": 53
+        },
+        {
+            "date": "2023-07-20",
+            "overall": 56,
+            "environmental": 54,
+            "social": 60,
+            "governance": 54
+        },
+        {
+            "date": "2023-07-27",
+            "overall": 57,
+            "environmental": 56,
+            "social": 59,
+            "governance": 56
+        },
+        {
+            "date": "2023-08-03",
+            "overall": 58,
+            "environmental": 58,
+            "social": 58,
+            "governance": 58
+        },
+        {
+            "date": "2023-08-10",
+            "overall": 57,
+            "environmental": 57,
+            "social": 57,
+            "governance": 57
+        },
+        {
+            "date": "2023-08-17",
+            "overall": 56,
+            "environmental": 56,
+            "social": 56,
+            "governance": 56
+        },
+        {
+            "date": "2023-08-24",
+            "overall": 58,
+            "environmental": 59,
+            "social": 57,
+            "governance": 58
+        },
+        {
+            "date": "2023-08-31",
+            "overall": 59,
+            "environmental": 62,
+            "social": 58,
+            "governance": 57
+        },
+        {
+            "date": "2023-09-07",
+            "overall": 61,
+            "environmental": 65,
+            "social": 59,
+            "governance": 59
+        },
+        {
+            "date": "2023-09-14",
+            "overall": 60,
+            "environmental": 64,
+            "social": 58,
+            "governance": 58
+        },
+        {
+            "date": "2023-09-21",
+            "overall": 59,
+            "environmental": 63,
+            "social": 57,
+            "governance": 57
+        },
+        {
+            "date": "2023-09-28",
+            "overall": 61,
+            "environmental": 66,
+            "social": 59,
+            "governance": 58
+        },
+        {
+            "date": "2023-10-05",
+            "overall": 62,
+            "environmental": 67,
+            "social": 58,
+            "governance": 59
+        },
+        {
+            "date": "2023-10-12",
+            "overall": 63,
+            "environmental": 68,
+            "social": 58,
+            "governance": 61
+        },
+        {
+            "date": "2023-10-19",
+            "overall": 65,
+            "environmental": 70,
+            "social": 59,
+            "governance": 63
+        },
+        {
+            "date": "2023-10-26",
+            "overall": 64,
+            "environmental": 72,
+            "social": 58,
+            "governance": 62
+        },
+        {
+            "date": "2023-11-02",
+            "overall": 66,
+            "environmental": 72,
+            "social": 57,
+            "governance": 60
+        },
+        {
+            "date": "2023-11-09",
+            "overall": 65,
+            "environmental": 71,
+            "social": 58,
+            "governance": 66
+        },
+        {
+            "date": "2023-11-16",
+            "overall": 64,
+            "environmental": 72,
+            "social": 58,
+            "governance": 62
+        }
+    ]
+}

@@ -1,0 +1,76 @@
+{
+    "categories": [
+        {
+            "id": "environmental",
+            "name": "Environmental",
+            "description": "Factors related to a company's impact on the natural environment",
+            "color": "#4CAF50",
+            "subcategories": [
+                {
+                    "id": "climate_change",
+                    "name": "Climate Change"
+                },
+                {
+                    "id": "pollution",
+                    "name": "Pollution"
+                },
+                {
+                    "id": "resource_use",
+                    "name": "Resource Use"
+                },
+                {
+                    "id": "biodiversity",
+                    "name": "Biodiversity"
+                }
+            ]
+        },
+        {
+            "id": "social",
+            "name": "Social",
+            "description": "Factors related to a company's relationships with stakeholders",
+            "color": "#2196F3",
+            "subcategories": [
+                {
+                    "id": "labor_practices",
+                    "name": "Labor Practices"
+                },
+                {
+                    "id": "human_rights",
+                    "name": "Human Rights"
+                },
+                {
+                    "id": "community_relations",
+                    "name": "Community Relations"
+                },
+                {
+                    "id": "product_safety",
+                    "name": "Product Safety"
+                }
+            ]
+        },
+        {
+            "id": "governance",
+            "name": "Governance",
+            "description": "Factors related to a company's leadership and controls",
+            "color": "#9C27B0",
+            "subcategories": [
+                {
+                    "id": "board_structure",
+                    "name": "Board Structure"
+                },
+                {
+                    "id": "business_ethics",
+                    "name": "Business Ethics"
+                },
+                {
+                    "id": "executive_compensation",
+                    "name": "Executive Compensation"
+                },
+                {
+                    "id": "transparency",
+                    "name": "Transparency"
+                }
+            ]
+        }
+    ]
+}

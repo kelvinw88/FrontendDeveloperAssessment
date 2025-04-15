@@ -1,0 +1,382 @@
+{
+    "companyId": "demo-company-123",
+    "companyName": "Acme Corporation",
+    "total": 32,
+    "incidents": [
+        {
+            "id": "incident-456",
+            "title": "Emissions Reporting Violation",
+            "date": "2023-10-15T14:30:00Z",
+            "category": "environmental",
+            "subcategory": "climate_change",
+            "severity": "high",
+            "description": "Company fined $1.5M for misreporting carbon emissions",
+            "detailedDescription": "Regulatory authorities have imposed a $1.5M fine on Acme Corporation for systematically underreporting emissions data.",
+            "location": "Frankfurt, Germany",
+            "riskScoreImpact": {
+                "overall": 8.2,
+                "environmental": 16.5,
+                "social": 0,
+                "governance": 0.8
+            },
+            "sources": [
+                {
+                    "title": "European Regulatory Authority Report",
+                    "url": "https://example.com/regulatory/report-2023-112",
+                    "publishDate": "2023-10-15T10:00:00Z"
+                },
+                {
+                    "title": "Company Press Release",
+                    "url": "https://acme-corp.example.com/press/emission-statement",
+                    "publishDate": "2023-10-16T09:30:00Z"
+                }
+            ]
+        },
+        {
+            "id": "incident-457",
+            "title": "Workplace Safety Incident",
+            "date": "2023-09-22T09:15:00Z",
+            "category": "social",
+            "subcategory": "labor_practices",
+            "severity": "medium",
+            "description": "Three workers injured in manufacturing plant accident",
+            "detailedDescription": "An equipment malfunction at Acme's Munich manufacturing plant resulted in injuries to three workers.",
+            "location": "Munich, Germany",
+            "riskScoreImpact": {
+                "overall": 4.5,
+                "environmental": 0,
+                "social": 9.3,
+                "governance": 3.7
+            },
+            "sources": [
+                {
+                    "title": "Local News Report",
+                    "url": "https://example.com/news/workplace-accident",
+                    "publishDate": "2023-09-22T12:45:00Z"
+                }
+            ]
+        },
+        {
+            "id": "incident-458",
+            "title": "Executive Resignation",
+            "date": "2023-10-18T16:45:00Z",
+            "category": "governance",
+            "subcategory": "board_structure",
+            "severity": "medium",
+            "description": "CFO resigns following emissions reporting scandal",
+            "detailedDescription": "Acme's Chief Financial Officer has resigned with immediate effect following the emissions reporting violation.",
+            "location": "Company Headquarters",
+            "riskScoreImpact": {
+                "overall": 3.8,
+                "environmental": 0,
+                "social": 0,
+                "governance": 11.5
+            },
+            "sources": [
+                {
+                    "title": "Company Announcement",
+                    "url": "https://acme-corp.example.com/press/cfo-departure",
+                    "publishDate": "2023-10-18T16:30:00Z"
+                }
+            ]
+        },
+        {
+            "id": "incident-459",
+            "title": "Community Protests Against Expansion",
+            "date": "2023-08-05T10:20:00Z",
+            "category": "social",
+            "subcategory": "community_relations",
+            "severity": "medium",
+            "description": "Local communities protest against planned factory expansion",
+            "detailedDescription": "Residents in Berlin have organized protests against Acme's planned factory expansion, citing concerns over environmental impact.",
+            "location": "Berlin, Germany",
+            "riskScoreImpact": {
+                "overall": 3.2,
+                "environmental": 1.5,
+                "social": 8.4,
+                "governance": 0
+            },
+            "sources": [
+                {
+                    "title": "Local News Coverage",
+                    "url": "https://example.com/news/community-protest",
+                    "publishDate": "2023-08-05T14:10:00Z"
+                }
+            ]
+        },
+        {
+            "id": "incident-460",
+            "title": "Data Privacy Breach",
+            "date": "2023-11-02T08:15:00Z",
+            "category": "governance",
+            "subcategory": "business_ethics",
+            "severity": "critical",
+            "description": "Customer data breach affecting 100,000+ users",
+            "detailedDescription": "A significant security breach was discovered in Acme's customer database, potentially exposing personal information of over 100,000 users.",
+            "location": "Global",
+            "riskScoreImpact": {
+                "overall": 12.7,
+                "environmental": 0,
+                "social": 8.3,
+                "governance": 17.5
+            },
+            "sources": [
+                {
+                    "title": "Company Security Notice",
+                    "url": "https://acme-corp.example.com/security/data-incident",
+                    "publishDate": "2023-11-02T12:00:00Z"
+                },
+                {
+                    "title": "Technology News Coverage",
+                    "url": "https://example.com/tech/acme-data-breach",
+                    "publishDate": "2023-11-02T15:30:00Z"
+                }
+            ]
+        },
+        {
+            "id": "incident-461",
+            "title": "Supply Chain Labor Violations",
+            "date": "2023-07-12T11:30:00Z",
+            "category": "social",
+            "subcategory": "human_rights",
+            "severity": "high",
+            "description": "Report reveals labor violations at key supplier factories",
+            "detailedDescription": "An NGO investigation has uncovered concerning labor practices at three factories operated by Acme's key suppliers in Asia.",
+            "location": "Multiple locations in Asia",
+            "riskScoreImpact": {
+                "overall": 7.8,
+                "environmental": 0,
+                "social": 16.2,
+                "governance": 4.9
+            },
+            "sources": [
+                {
+                    "title": "NGO Investigative Report",
+                    "url": "https://example.org/reports/supply-chain-2023",
+                    "publishDate": "2023-07-12T09:00:00Z"
+                }
+            ]
+        },
+        {
+            "id": "incident-462",
+            "title": "Misleading Product Claims",
+            "date": "2023-08-23T14:20:00Z",
+            "category": "governance",
+            "subcategory": "business_ethics",
+            "severity": "medium",
+            "description": "Consumer protection agency challenges 'eco-friendly' marketing claims",
+            "detailedDescription": "The national consumer protection agency has issued a formal warning to Acme regarding potentially misleading 'eco-friendly' product claims.",
+            "location": "National",
+            "riskScoreImpact": {
+                "overall": 4.2,
+                "environmental": 2.8,
+                "social": 1.5,
+                "governance": 9.4
+            },
+            "sources": [
+                {
+                    "title": "Consumer Protection Agency Statement",
+                    "url": "https://example.gov/consumer-protection/notices/2023-08-23",
+                    "publishDate": "2023-08-23T13:00:00Z"
+                }
+            ]
+        },
+        {
+            "id": "incident-463",
+            "title": "Water Pollution Incident",
+            "date": "2023-06-08T07:45:00Z",
+            "category": "environmental",
+            "subcategory": "pollution",
+            "severity": "high",
+            "description": "Chemical spill contaminates local water source",
+            "detailedDescription": "A chemical spill at Acme's manufacturing facility resulted in contamination of a nearby river, affecting local communities.",
+            "location": "Rhine River, Germany",
+            "riskScoreImpact": {
+                "overall": 7.9,
+                "environmental": 15.6,
+                "social": 5.2,
+                "governance": 3.0
+            },
+            "sources": [
+                {
+                    "title": "Environmental Protection Agency Notice",
+                    "url": "https://example.gov/environmental/incidents/2023-06-08",
+                    "publishDate": "2023-06-08T12:30:00Z"
+                },
+                {
+                    "title": "Local News Coverage",
+                    "url": "https://example.com/news/chemical-spill",
+                    "publishDate": "2023-06-08T10:15:00Z"
+                }
+            ]
+        },
+        {
+            "id": "incident-464",
+            "title": "Gender Pay Gap Report",
+            "date": "2023-09-15T09:30:00Z",
+            "category": "social",
+            "subcategory": "labor_practices",
+            "severity": "low",
+            "description": "Report shows 10% gender pay gap at company",
+            "detailedDescription": "Acme's mandatory gender pay gap report reveals a 10% difference in average pay between male and female employees.",
+            "location": "Company-wide",
+            "riskScoreImpact": {
+                "overall": 2.1,
+                "environmental": 0,
+                "social": 6.5,
+                "governance": 0
+            },
+            "sources": [
+                {
+                    "title": "Company Diversity Report",
+                    "url": "https://acme-corp.example.com/diversity/gender-pay-2023",
+                    "publishDate": "2023-09-15T09:00:00Z"
+                }
+            ]
+        },
+        {
+            "id": "incident-465",
+            "title": "Executive Compensation Controversy",
+            "date": "2023-07-20T15:45:00Z",
+            "category": "governance",
+            "subcategory": "executive_compensation",
+            "severity": "medium",
+            "description": "Shareholders dispute CEO bonus amid declining performance",
+            "detailedDescription": "At Acme's annual shareholder meeting, a significant minority of investors voted against the CEO's $3.5M bonus.",
+            "location": "Company Headquarters",
+            "riskScoreImpact": {
+                "overall": 3.5,
+                "environmental": 0,
+                "social": 0,
+                "governance": 10.6
+            },
+            "sources": [
+                {
+                    "title": "Financial Times Article",
+                    "url": "https://example.com/financial/acme-shareholder-revolt",
+                    "publishDate": "2023-07-20T18:20:00Z"
+                }
+            ]
+        },
+        {
+            "id": "incident-466",
+            "title": "Product Safety Recall",
+            "date": "2023-10-30T11:20:00Z",
+            "category": "social",
+            "subcategory": "product_safety",
+            "severity": "medium",
+            "description": "Safety recall issued for consumer product line",
+            "detailedDescription": "Acme has issued a voluntary recall for its latest consumer electronics product after reports of overheating issues.",
+            "location": "European Markets",
+            "riskScoreImpact": {
+                "overall": 4.8,
+                "environmental": 1.2,
+                "social": 9.7,
+                "governance": 2.5
+            },
+            "sources": [
+                {
+                    "title": "Product Safety Recall Notice",
+                    "url": "https://acme-corp.example.com/recall/october-2023",
+                    "publishDate": "2023-10-30T11:00:00Z"
+                }
+            ]
+        },
+        {
+            "id": "incident-467",
+            "title": "Renewable Energy Commitment",
+            "date": "2023-06-22T14:00:00Z",
+            "category": "environmental",
+            "subcategory": "climate_change",
+            "severity": "low",
+            "description": "Company pledges 100% renewable energy by 2030",
+            "detailedDescription": "In a positive development, Acme has announced a commitment to power all operations with 100% renewable energy by 2030.",
+            "location": "Global Operations",
+            "riskScoreImpact": {
+                "overall": -1.5,
+                "environmental": -4.2,
+                "social": 0,
+                "governance": 0
+            },
+            "sources": [
+                {
+                    "title": "Company Sustainability Announcement",
+                    "url": "https://acme-corp.example.com/sustainability/renewable-commitment",
+                    "publishDate": "2023-06-22T13:30:00Z"
+                }
+            ]
+        },
+        {
+            "id": "incident-468",
+            "title": "Biodiversity Impact Assessment",
+            "date": "2023-08-14T10:10:00Z",
+            "category": "environmental",
+            "subcategory": "biodiversity",
+            "severity": "medium",
+            "description": "Study shows facility expansion threatens protected species",
+            "detailedDescription": "An independent environmental impact assessment has identified potential threats to several protected species due to Acme's planned facility expansion.",
+            "location": "Northern Germany",
+            "riskScoreImpact": {
+                "overall": 3.8,
+                "environmental": 8.9,
+                "social": 2.1,
+                "governance": 0
+            },
+            "sources": [
+                {
+                    "title": "Environmental Impact Report",
+                    "url": "https://example.org/reports/acme-biodiversity-2023",
+                    "publishDate": "2023-08-14T09:00:00Z"
+                }
+            ]
+        },
+        {
+            "id": "incident-469",
+            "title": "Board Diversity Challenge",
+            "date": "2023-09-05T13:30:00Z",
+            "category": "governance",
+            "subcategory": "board_structure",
+            "severity": "low",
+            "description": "Investors push for increased board diversity",
+            "detailedDescription": "A coalition of institutional investors has filed a shareholder proposal calling for Acme to increase diversity on its board of directors.",
+            "location": "Corporate Governance",
+            "riskScoreImpact": {
+                "overall": 1.9,
+                "environmental": 0,
+                "social": 0.8,
+                "governance": 5.2
+            },
+            "sources": [
+                {
+                    "title": "Investor Relations Filing",
+                    "url": "https://acme-corp.example.com/investors/shareholder-proposals-2023",
+                    "publishDate": "2023-09-05T13:00:00Z"
+                }
+            ]
+        },
+        {
+            "id": "incident-470",
+            "title": "Conflict Minerals Audit",
+            "date": "2023-11-10T09:45:00Z",
+            "category": "social",
+            "subcategory": "human_rights",
+            "severity": "medium",
+            "description": "Audit finds insufficient diligence on conflict minerals in supply chain",
+            "detailedDescription": "A third-party audit has identified gaps in Acme's due diligence process for ensuring its supply chain is free of conflict minerals.",
+            "location": "Global Supply Chain",
+            "riskScoreImpact": {
+                "overall": 3.6,
+                "environmental": 0,
+                "social": 7.8,
+                "governance": 2.9
+            },
+            "sources": [
+                {
+                    "title": "Supply Chain Audit Report",
+                    "url": "https://example.org/audits/conflict-minerals-2023",
+                    "publishDate": "2023-11-10T08:30:00Z"
+                }
+            ]
+        }
+    ]
+}
