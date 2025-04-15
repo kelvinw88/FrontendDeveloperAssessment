@@ -11,9 +11,13 @@ interface Incident {
   title: string;
   date: string;
   category: string;
+  subcategory: string;
   severity: string;
   description: string;
+  detailedDescription: string;
+  location: string;
   riskScoreImpact: { overall: number; environmental: number; social: number; governance: number };
+  sources: Array<{ title: string; url: string; publishDate: string }>;
 }
 
 interface HistoricalData {
@@ -23,6 +27,25 @@ interface HistoricalData {
   social: number;
   governance: number;
 }
+
+interface EsgCategory {
+  id: string;
+  name: string;
+  description: string;
+  color: string;
+  subcategories: Array<{
+    id: string;
+    name: string;
+  }>;
+}
+
+interface SeverityLevel {
+  id: string;
+  name: string;
+  description: string;
+  color: string;
+}
+
 
 interface RiskState {
   companyId: string;
@@ -37,8 +60,18 @@ interface RiskState {
   };
   incidents: Incident[];
   historicalData: HistoricalData[];
-  loading: boolean;
-  error: string | null;
+  loadingRiskData: boolean;
+  loadingIncidents: boolean;
+  loadingHistoricalData: boolean;
+  errorRiskData: string | null;
+  errorIncidents: string | null;
+  errorHistoricalData: string | null;
+  esgCategories: EsgCategory[];
+  severityLevels: SeverityLevel[];
+  loadingEsgCategories: boolean;
+  loadingSeverityLevels: boolean;
+  errorEsgCategories: string | null;
+  errorSeverityLevels: string | null;
 }
 
 const initialState: RiskState = {
@@ -54,8 +87,18 @@ const initialState: RiskState = {
   },
   incidents: [],
   historicalData: [],
-  loading: false,
-  error: null,
+  loadingRiskData: false,
+  loadingIncidents: false,
+  loadingHistoricalData: false,
+  errorRiskData: null,
+  errorIncidents: null,
+  errorHistoricalData: null,
+  esgCategories: [],
+  severityLevels: [],
+  loadingEsgCategories: false,
+  loadingSeverityLevels: false,
+  errorEsgCategories: null,
+  errorSeverityLevels: null,
 };
 
 const riskSlice = createSlice({
@@ -64,20 +107,62 @@ const riskSlice = createSlice({
   reducers: {
     setRiskData: (state, action: PayloadAction<Partial<RiskState>>) => {
       Object.assign(state, action.payload);
-      state.loading = false;
-      state.error = null;
     },
-    setLoading: (state) => {
-      state.loading = true;
-      state.error = null;
+    setLoadingRiskData: (state) => {
+      state.loadingRiskData = true;
+      state.errorRiskData = null;
     },
-    setError: (state, action: PayloadAction<string>) => {
-      state.loading = false;
-      state.error = action.payload;
+    setLoadingIncidents: (state) => {
+      state.loadingIncidents = true;
+      state.errorIncidents = null;
+    },
+    setLoadingHistoricalData: (state) => {
+      state.loadingHistoricalData = true;
+      state.errorHistoricalData = null;
+    },
+    setErrorRiskData: (state, action: PayloadAction<string>) => {
+      state.loadingRiskData = false;
+      state.errorRiskData = action.payload;
+    },
+    setErrorIncidents: (state, action: PayloadAction<string>) => {
+      state.loadingIncidents = false;
+      state.errorIncidents = action.payload;
+    },
+    setErrorHistoricalData: (state, action: PayloadAction<string>) => {
+      state.loadingHistoricalData = false;
+      state.errorHistoricalData = action.payload;
+    },
+    setLoadingEsgCategories: (state) => {
+      state.loadingEsgCategories = true;
+      state.errorEsgCategories = null;
+    },
+    setErrorEsgCategories: (state, action: PayloadAction<string>) => {
+      state.loadingEsgCategories = false;
+      state.errorEsgCategories = action.payload;
+    },
+    setLoadingSeverityLevels: (state) => {
+      state.loadingSeverityLevels = true;
+      state.errorSeverityLevels = null;
+    },
+    setErrorSeverityLevels: (state, action: PayloadAction<string>) => {
+      state.loadingSeverityLevels = false;
+      state.errorSeverityLevels = action.payload;
     },
   },
 });
 
-export const { setRiskData, setLoading, setError } = riskSlice.actions;
+export const {
+  setRiskData,
+  setLoadingRiskData,
+  setLoadingIncidents,
+  setLoadingHistoricalData,
+  setErrorRiskData,
+  setErrorIncidents,
+  setErrorHistoricalData,
+  setLoadingEsgCategories,
+  setErrorEsgCategories,
+  setLoadingSeverityLevels,
+  setErrorSeverityLevels,
+} = riskSlice.actions;
 export default riskSlice.reducer;
-export type { RiskState, Incident, HistoricalData };
+export type { RiskState, Incident, HistoricalData, SeverityLevel, EsgCategory };

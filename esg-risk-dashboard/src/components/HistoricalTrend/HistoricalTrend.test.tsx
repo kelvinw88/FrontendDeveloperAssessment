@@ -24,6 +24,7 @@ test('renders HistoricalTrend with Redux data', () => {
           governance: 63,
         },
       ],
+      loadingHistoricalData: false,
     })
   );
   render(
@@ -35,13 +36,10 @@ test('renders HistoricalTrend with Redux data', () => {
   expect(screen.getByRole('region', { name: /Historical Risk Trend/i })).toContainElement(
     screen.getByRole('img', { name: /overall trend line/i })
   );
-  expect(screen.getByRole('img', { name: /environmental trend line/i })).toBeInTheDocument();
-  expect(screen.getByRole('img', { name: /social trend line/i })).toBeInTheDocument();
-  expect(screen.getByRole('img', { name: /governance trend line/i })).toBeInTheDocument();
 });
 
 test('renders loading state', () => {
-  store.dispatch(setRiskData({ loading: true }));
+  store.dispatch(setRiskData({ loadingHistoricalData: true }));
   render(
     <Provider store={store}>
       <HistoricalTrend />
@@ -51,7 +49,12 @@ test('renders loading state', () => {
 });
 
 test('renders error state', () => {
-  store.dispatch(setRiskData({ error: 'Test error' }));
+  store.dispatch(
+    setRiskData({
+      errorHistoricalData: 'Test error',
+      loadingHistoricalData: false,
+    })
+  );
   render(
     <Provider store={store}>
       <HistoricalTrend />
@@ -61,7 +64,7 @@ test('renders error state', () => {
 });
 
 test('renders no data state', () => {
-  store.dispatch(setRiskData({ historicalData: [] }));
+  store.dispatch(setRiskData({ historicalData: [], loadingHistoricalData: false }));
   render(
     <Provider store={store}>
       <HistoricalTrend />

@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from '../store';
+import { RootState } from '../../store';
 import {
   Card,
   CardContent,
@@ -8,7 +8,6 @@ import {
   Grid,
   Box,
   CircularProgress,
-  Divider,
 } from '@mui/material';
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
@@ -22,7 +21,8 @@ const CompanyOverview: React.FC = () => {
     trend,
     lastUpdated,
     categories,
-    loading,
+    loadingRiskData,
+    errorRiskData,
   } = useSelector((state: RootState) => state.risk);
 
   const getTrendIcon = (direction: string) => {
@@ -42,7 +42,7 @@ const CompanyOverview: React.FC = () => {
     return 'success.main';
   };
 
-  if (loading) {
+  if (loadingRiskData) {
     return (
       <Card sx={{ mb: 3 }} role="region" aria-label="Company Risk Overview">
         <CardContent>
@@ -50,6 +50,19 @@ const CompanyOverview: React.FC = () => {
             Company Risk Overview
           </Typography>
           <CircularProgress size={24} />
+        </CardContent>
+      </Card>
+    );
+  }
+
+  if (errorRiskData) {
+    return (
+      <Card sx={{ mb: 3 }} role="region" aria-label="Company Risk Overview">
+        <CardContent>
+          <Typography variant="h6" gutterBottom>
+            Company Risk Overview
+          </Typography>
+          <Typography color="error">{errorRiskData}</Typography>
         </CardContent>
       </Card>
     );
@@ -119,7 +132,7 @@ const CompanyOverview: React.FC = () => {
             </Typography>
           </Grid>
         </Grid>
-        <Divider sx={{ my: 2 }} />
+        <Box sx={{ my: 2, borderBottom: 1, borderColor: 'divider' }} />
         <Typography variant="subtitle1" gutterBottom>
           ESG Categories
         </Typography>

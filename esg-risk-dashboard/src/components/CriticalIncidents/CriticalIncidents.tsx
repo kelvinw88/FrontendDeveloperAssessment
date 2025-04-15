@@ -1,10 +1,12 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import { RootState } from '../store';
+import { RootState } from '../../store';
 import { Box, Typography, List, ListItem, ListItemText, CircularProgress } from '@mui/material';
 
 const CriticalIncidents: React.FC = () => {
-  const { incidents, loading } = useSelector((state: RootState) => state.risk);
+  const { incidents, loadingIncidents, errorIncidents } = useSelector(
+    (state: RootState) => state.risk
+  );
 
   const criticalIncidents = incidents.filter((incident) => {
     const incidentDate = new Date(incident.date);
@@ -16,11 +18,20 @@ const CriticalIncidents: React.FC = () => {
     );
   });
 
-  if (loading) {
+  if (loadingIncidents) {
     return (
       <Box sx={{ mb: 3 }} role="region" aria-label="Critical Incidents">
         <Typography variant="h6">Critical Incidents (Last 30 Days)</Typography>
         <CircularProgress size={24} />
+      </Box>
+    );
+  }
+
+  if (errorIncidents) {
+    return (
+      <Box sx={{ mb: 3 }} role="region" aria-label="Critical Incidents">
+        <Typography variant="h6">Critical Incidents (Last 30 Days)</Typography>
+        <Typography color="error">{errorIncidents}</Typography>
       </Box>
     );
   }

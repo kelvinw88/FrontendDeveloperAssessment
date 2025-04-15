@@ -6,7 +6,9 @@ import { Box, Typography, CircularProgress } from '@mui/material';
 
 const HistoricalTrend: React.FC = () => {
   const svgRef = useRef<SVGSVGElement>(null);
-  const { historicalData, loading, error } = useSelector((state: RootState) => state.risk);
+  const { historicalData, loadingHistoricalData, errorHistoricalData } = useSelector(
+    (state: RootState) => state.risk
+  );
 
   const metrics = [
     { key: 'overall', color: 'steelblue', label: 'Overall' },
@@ -98,7 +100,7 @@ const HistoricalTrend: React.FC = () => {
     });
   }, [historicalData]);
 
-  if (loading) {
+  if (loadingHistoricalData) {
     return (
       <Box sx={{ mb: 3 }} role="region" aria-label="Historical Risk Trend">
         <Typography variant="h6">Historical Risk Trend</Typography>
@@ -107,20 +109,11 @@ const HistoricalTrend: React.FC = () => {
     );
   }
 
-  if (error) {
+  if (errorHistoricalData) {
     return (
       <Box sx={{ mb: 3 }} role="region" aria-label="Historical Risk Trend">
         <Typography variant="h6">Historical Risk Trend</Typography>
-        <Typography color="error">{error}</Typography>
-      </Box>
-    );
-  }
-
-  if (!historicalData.length) {
-    return (
-      <Box sx={{ mb: 3 }} role="region" aria-label="Historical Risk Trend">
-        <Typography variant="h6">Historical Risk Trend</Typography>
-        <Typography>No historical data available.</Typography>
+        <Typography color="error">{errorHistoricalData}</Typography>
       </Box>
     );
   }

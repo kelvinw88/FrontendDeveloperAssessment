@@ -5,6 +5,17 @@
         {
             "id": "incident-456",
             "title": "Emissions Reporting Violation",
+            "date": "2025-04-15T14:30:00Z",
+            "category": "environmental",
+            "severity": "high",
+            "description": "Company fined $1.5M for misreporting carbon emissions",
+            "location": "Frankfurt, Germany",
+            "riskScoreImpact": 8.2,
+            "summary": "Regulatory authorities imposed a substantial fine for deliberate manipulation of emissions reporting data, affecting the company's environmental risk score."
+        },
+        {
+            "id": "incident-456",
+            "title": "Emissions Reporting Violation",
             "date": "2023-10-15T14:30:00Z",
             "category": "environmental",
             "severity": "high",
