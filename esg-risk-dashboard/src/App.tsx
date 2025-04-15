@@ -1,13 +1,13 @@
 import React from 'react';
 import { Container, CircularProgress, Typography, Alert } from '@mui/material';
-import CompanyOverview from './components/CompanyOverview/CompanyOverview';
-import HistoricalTrend from './components/HistoricalTrend/HistoricalTrend';
-import IncidentTimeline from './components/IncidentTimeline/IncidentTimeline';
-import CriticalIncidents from './components/CriticalIncidents/CriticalIncidents';
+import CompanyOverview from './features/CompanyOverview/CompanyOverview';
+import HistoricalTrend from './features/HistoricalTrend/HistoricalTrend';
+import IncidentTimeline from './features/IncidentTimeline/IncidentTimeline';
+import CriticalIncidents from './features/CriticalIncidents/CriticalIncidents';
 import useRiskData from './hooks/useRiskData';
 
 const App: React.FC = () => {
-  const { loading, error, riskData } = useRiskData();
+  const { error, riskData } = useRiskData();
 
   const {
     companyId,
@@ -30,18 +30,6 @@ const App: React.FC = () => {
     esgCategories,
     severityLevels,
   } = riskData;
-
-  if (loading) {
-    return <CircularProgress sx={{ display: 'block', mx: 'auto', mt: 4 }} />;
-  }
-
-  if (error) {
-    return (
-      <Alert severity="error" sx={{ mt: 4 }}>
-        Failed to load data: {error}
-      </Alert>
-    );
-  }
 
   return (
     <Container maxWidth="lg" sx={{ py: 4 }}>

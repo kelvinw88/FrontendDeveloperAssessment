@@ -1,4 +1,4 @@
-import { RiskState, Incident, HistoricalData, EsgCategory, SeverityLevel } from '../features/riskSlice';
+import { RiskState, Incident, HistoricalData, EsgCategory, SeverityLevel } from '../store/riskSlice';
 
 // Utility to add delay
 const delay = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
@@ -18,8 +18,8 @@ const handleResponse = async (response: Response) => {
 };
 
 export const fetchRiskData = async (): Promise<Partial<RiskState>> => {
-  await delay(300);
-  if (simulateError(0)) {
+  await delay(3000);
+  if (simulateError(0.5)) {
     throw new Error('Simulated API failure for risk data');
   }
   const response = await fetch('/company-risk-overview.json');
@@ -27,7 +27,7 @@ export const fetchRiskData = async (): Promise<Partial<RiskState>> => {
 };
 
 export const fetchIncidents = async (): Promise<Incident[]> => {
-  await delay(1000);
+  await delay(3000);
   if (simulateError(0)) {
     throw new Error('Simulated API failure for incidents');
   }
@@ -37,8 +37,8 @@ export const fetchIncidents = async (): Promise<Incident[]> => {
 };
 
 export const fetchRiskScoreHistory = async (): Promise<HistoricalData[]> => {
-  await delay(300);
-  if (simulateError(0)) {
+  await delay(3000);
+  if (simulateError(0.2)) {
     throw new Error('Simulated API failure for historical data');
   }
   const response = await fetch('/risk-score-history.json');
@@ -47,7 +47,7 @@ export const fetchRiskScoreHistory = async (): Promise<HistoricalData[]> => {
 };
 
 export const fetchEsgCategories = async (): Promise<EsgCategory[]> => {
-  await delay(300);
+  await delay(3000);
   if (simulateError(0)) {
     throw new Error('Simulated API failure for ESG Categories');
   }
@@ -57,7 +57,7 @@ export const fetchEsgCategories = async (): Promise<EsgCategory[]> => {
 };
 
 export const fetchSeverityLevels = async (): Promise<SeverityLevel[]> => {
-  await delay(300);
+  await delay(3000);
   if (simulateError(0)) {
     throw new Error('Simulated API failure for severity levels');
   }
@@ -68,7 +68,7 @@ export const fetchSeverityLevels = async (): Promise<SeverityLevel[]> => {
 
 export const fetchCriticalIncidents = async (): Promise<SeverityLevel[]> => {
   await delay(300);
-  if (simulateError(0)) {
+  if (simulateError(0.5)) {
     throw new Error('Simulated API failure for critical incidents');
   }
   const response = await fetch('/critical-incidents.json');

@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import IncidentTimeline from '../IncidentTimeline/IncidentTimeline'; // Adjust the path as needed
-import { Incident, EsgCategory, SeverityLevel } from '../../features/riskSlice'; // Adjust the path as needed
+import { Incident, EsgCategory, SeverityLevel } from '../../store/riskSlice'; // Adjust the path as needed
 import { format, subDays } from 'date-fns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';

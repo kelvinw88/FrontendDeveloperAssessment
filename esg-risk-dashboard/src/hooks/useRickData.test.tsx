@@ -4,7 +4,7 @@ import configureStore from 'redux-mock-store';
 import thunk from 'redux-thunk';
 import useRiskData from './useRiskData';
 import * as api from '../services/api';
-import * as riskActions from '../features/riskSlice';
+import * as riskActions from '../store/riskSlice';
 
 const mockStore = configureStore({
   middleware: [thunk],

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
 import IncidentModal, { IncidentModalProps } from './IncidentModal';
-import { Incident, RiskScoreImpact } from '../../features/riskSlice';
+import { Incident, RiskScoreImpact } from '../../store/riskSlice';
 import { format, subDays } from 'date-fns';
 
 export default {

@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react';
 import * as d3 from 'd3';
 import { Box, Typography, CircularProgress } from '@mui/material';
-import { HistoricalData } from '../../features/riskSlice';
+import { HistoricalData } from '../../store/riskSlice';
 
 interface HistoricalTrendProps {
   data: HistoricalData[];

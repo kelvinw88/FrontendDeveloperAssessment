@@ -15,7 +15,7 @@ import {
   setLoadingCriticalIncidents,
   setErrorCriticalIncidents,
   RiskState,
-} from '../features/riskSlice';
+} from '../store/riskSlice';
 import {
   fetchRiskData,
   fetchIncidents,
@@ -37,55 +37,68 @@ const useRiskData = (): RiskDataHookResult => {
 
   useEffect(() => {
     const loadData = async () => {
+      // Set all loading states to true at once
       dispatch(setLoadingRiskData());
-      try {
-        const riskData = await fetchRiskData();
-        dispatch(setRiskData({ ...riskData, loadingRiskData: false }));
-      } catch (err) {
-        dispatch(setErrorRiskData(err instanceof Error ? err.message : 'Unknown error'));
-      }
-
       dispatch(setLoadingIncidents());
-      try {
-        const incidents = await fetchIncidents();
-        dispatch(setRiskData({ incidents, loadingIncidents: false }));
-      } catch (err) {
-        dispatch(setErrorIncidents(err instanceof Error ? err.message : 'Unknown error'));
-      }
-
       dispatch(setLoadingHistoricalData());
-      try {
-        const historicalData = await fetchRiskScoreHistory();
-        dispatch(setRiskData({ historicalData, loadingHistoricalData: false }));
-      } catch (err) {
-        dispatch(setErrorHistoricalData(err instanceof Error ? err.message : 'Unknown error'));
-      }
-
       dispatch(setLoadingEsgCategories());
-      try {
-        const esgCategories = await fetchEsgCategories();
-        dispatch(setRiskData({ esgCategories, loadingEsgCategories: false }));
-      } catch (err) {
-        dispatch(setErrorEsgCategories(err instanceof Error ? err.message : 'Unknown error'));
-      }
-
       dispatch(setLoadingSeverityLevels());
-      try {
-        const severityLevels = await fetchSeverityLevels();
-        dispatch(setRiskData({ severityLevels, loadingSeverityLevels: false }));
-      } catch (err) {
-        dispatch(setErrorSeverityLevels(err instanceof Error ? err.message : 'Unknown error'));
-      }
-
       dispatch(setLoadingCriticalIncidents());
-      try {
-        const criticalIncidents = await fetchCriticalIncidents();
-        dispatch(setRiskData({ criticalIncidents, loadingCriticalIncidents: false }));
-      } catch (err) {
-        dispatch(setErrorCriticalIncidents(err instanceof Error ? err.message : 'Unknown error'));
-      }
+  
+      // Fire all requests simultaneously
+      const requests = [
+        fetchRiskData().then(data => {
+          dispatch(setRiskData({ ...data, loadingRiskData: false }));
+          return data;
+        }).catch(err => {
+          dispatch(setErrorRiskData(err instanceof Error ? err.message : 'Unknown error'));
+          return null;
+        }),
+  
+        fetchIncidents().then(data => {
+          dispatch(setRiskData({ incidents: data, loadingIncidents: false }));
+          return data;
+        }).catch(err => {
+          dispatch(setErrorIncidents(err instanceof Error ? err.message : 'Unknown error'));
+          return null;
+        }),
+  
+        fetchRiskScoreHistory().then(data => {
+          dispatch(setRiskData({ historicalData: data, loadingHistoricalData: false }));
+          return data;
+        }).catch(err => {
+          dispatch(setErrorHistoricalData(err instanceof Error ? err.message : 'Unknown error'));
+          return null;
+        }),
+  
+        fetchEsgCategories().then(data => {
+          dispatch(setRiskData({ esgCategories: data, loadingEsgCategories: false }));
+          return data;
+        }).catch(err => {
+          dispatch(setErrorEsgCategories(err instanceof Error ? err.message : 'Unknown error'));
+          return null;
+        }),
+  
+        fetchSeverityLevels().then(data => {
+          dispatch(setRiskData({ severityLevels: data, loadingSeverityLevels: false }));
+          return data;
+        }).catch(err => {
+          dispatch(setErrorSeverityLevels(err instanceof Error ? err.message : 'Unknown error'));
+          return null;
+        }),
+  
+        fetchCriticalIncidents().then(data => {
+          dispatch(setRiskData({ criticalIncidents: data, loadingCriticalIncidents: false }));
+          return data;
+        }).catch(err => {
+          dispatch(setErrorCriticalIncidents(err instanceof Error ? err.message : 'Unknown error'));
+          return null;
+        })
+      ];
+  
+      await Promise.all(requests);
     };
-
+  
     loadData();
   }, [dispatch]);
 

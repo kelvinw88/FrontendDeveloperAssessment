@@ -9,7 +9,7 @@ import {
   Button,
   Link
 } from '@mui/material';
-import { Incident } from '../../features/riskSlice';
+import { Incident } from '../../store/riskSlice';
 
 interface IncidentModalProps {
   incident: Incident | null;

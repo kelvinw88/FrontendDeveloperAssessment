@@ -3,56 +3,49 @@
 A React-based dashboard for visualizing ESG risk scores and incidents, built with Vite, TypeScript, Redux, D3.js, and Jest.
 
 ## Setup Instructions
-1. Clone the repository: `git clone <repo-url>`
 2. Install dependencies: `npm install`
 3. Run the development server: `npm run dev`
 4. Run tests: `npm test`
 5. View Storybook: `npm run storybook`
 6. Build Storybook: `npm run build-storybook`
 
-## Component Architecture
-- `App.tsx`: Orchestrates data fetching and rendering.
-- `CompanyOverview.tsx`: Summarizes all company risk data (name, ID, score, trend, categories).
-- `ESGChart.tsx`: Displays ESG category scores with D3.
-- `HistoricalTrend.tsx`: Visualizes historical risk scores with D3.
-- `IncidentTimeline.tsx`: Filters and lists incidents.
-- `CriticalIncidents.tsx`: Highlights critical incidents.
-- Redux manages state with `riskSlice`.
+## Tech Stack:
+- **React + TypeScript**: Type-safe UI components.
+- **Redux Toolkit**: Centralized state management.
+- **D3.js**: Custom data visualizations. (Also to stick with what the company is using right now)
+- **Material-UI (MUI)**: Responsive and accessible UI components.
+- **Jest + Testing Library**: Unit and integration testing.
+- **Vite**: Fast development/build tooling.
+- **Storybook**: Component documentation and isolation
 
-## Data Usage
-- **company-risk-overview.json**: Fully displayed in `CompanyOverview`, with score/trend in `RiskScore` and categories in `ESGChart`.
-- **incidents.json**: Powers incident timeline and critical incidents.
-- **risk-score-history.json**: Drives the historical trend chart.
-- **esg-categories.json** and **severity-levels.json**: Not used directly, as data is embedded in other files.
+## Component Architecture overview & Key Design Decsion
+At this point, I designed for speed of development but ensuring easy scalability in the future. 
 
-## Storybook Documentation
-Run `npm run storybook` to view:
-- **CompanyOverview**: Full company risk summary.
-- **RiskScore**: Overall score with trend.
-- **ESGChart**: ESG category bar chart.
-- **HistoricalTrend**: Historical score line chart.
-- **IncidentTimeline**: Filtered incident list.
-- **CriticalIncidents**: Critical incident highlights.
+I have designed the App.tsx to be the central hub of calling all APIs and the location of handling all the updates. 
 
-## Key Design Decisions
-- **Vite**: Fast development and ES modules.
-- **TypeScript**: Type safety.
-- **Redux**: Centralized state management.
-- **D3.js**: Flexible visualizations.
-- **Jest**: Comprehensive testing.
-- **MUI**: Responsive and accessible UI.
-- **Storybook**: Interactive component documentation.
+All other componenets are meant to be stateless. This way they are simple to maintain. They are also meant to be static componenet where they do not do anything fetching. It will make them easy to test as well. This way also makes it run in isoloation which will be easy to pin down on any bugs. This way also have in the future to do any code spliting and lazy loading. 
 
-## Management Approach
-- Redux Toolkit for state management.
-- JSON files simulate API calls.
-- Jest tests cover components and logic.
-- Storybook documents component usage.
+This way it Simplifies Storybook integration
+
+API calls and state management. I think we are good at this point but will need to move towards tool like Redux Toolkit or tanstack query for perofmrance and managment benifits. At this moment they are all in one reducers but once we onboard the libaray i menitoned it will be managed by those libaray. 
+And if we need to, we can create 1 reducer that is a combine of those data for easy access.
+
+
+## Folder Structure
+src/
+├── components/  // All shareable components between other features. For examplem, Button, layout, forms.
+├── features/    // Feature speific things, such as company ovewview   
+├── store/       // Anything redux related.
+├── styles/      // Global styling.
+ 
 
 ## Performance Considerations
-- Memoization prevents unnecessary renders.
-- D3 updates optimized.
-- Lazy loading planned for future.
+- Lazy loading Code splitting: because it can reduce the inital bundle size by 30-50%
+- Data Fetching Optmization: Redux Toolkit will be doing alot of caching for us to reduce the needs of refetching or accidentily rerendering/ not rerendering the page.
+- React memoization: It can be implmeneted on complex and heavy computing components taht doesn't get render ofthen.  
+- On board metric tools: to collect web vitals
+- On board alarm tools: to add alarms to notify engineer system is down
+- On board testing: Right now there is only unit testing, We can include E2E Testing and smoke test.
+
 
 ## Demo Video
-See `demo.mp4` for a 5-minute walkthrough.

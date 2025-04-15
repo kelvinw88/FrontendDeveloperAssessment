@@ -14,7 +14,7 @@ import {
 } from '@mui/material';
 import { format, subDays, parseISO, isAfter } from 'date-fns';
 import IncidentModal from '../IncidentModal/IncidentModal';
-import { CriticalIncident, Incident } from '../../features/riskSlice';
+import { CriticalIncident, Incident } from '../../store/riskSlice';
 
 const HIGH_SEVERITY_RATINGS: string[] = ['high', 'critical'];
 const SIGNIFICANT_IMPACT_THRESHOLD: number = 7.0;
@@ -73,9 +73,12 @@ const CriticalIncidents: React.FC<CriticalIncidentsProps> = ({
 
   if (errorCriticalIncidents) {
     return (
-      <Alert severity="error" sx={{ my: 4 }}>
-        Failed to load critical incidents: {errorCriticalIncidents}
-      </Alert>
+      <Box>
+        <Typography variant="h5" component="h2" gutterBottom>
+          Highlighted Critical Incidents
+        </Typography>
+        <Typography color="error">{errorCriticalIncidents}</Typography>
+      </Box>
     );
   }
 

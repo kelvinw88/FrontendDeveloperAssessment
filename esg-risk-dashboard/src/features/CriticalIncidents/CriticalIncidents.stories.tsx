@@ -1,7 +1,7 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
 import CriticalIncidents, { CriticalIncidentsProps } from './CriticalIncidents'; 
-import { CriticalIncident, Incident } from '../../features/riskSlice';
+import { CriticalIncident, Incident } from '../../store/riskSlice';
 import { format, subDays, parseISO } from 'date-fns';
 
 export default {

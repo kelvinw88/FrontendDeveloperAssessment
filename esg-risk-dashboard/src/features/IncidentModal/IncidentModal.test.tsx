@@ -2,7 +2,7 @@ import React from 'react';
 import { render, screen, within } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
 import IncidentModal from './IncidentModal';
-import { Incident } from '../../features/riskSlice';
+import { Incident } from '../../store/riskSlice';
 
 describe('IncidentModal', () => {
   const mockIncident: Incident = {

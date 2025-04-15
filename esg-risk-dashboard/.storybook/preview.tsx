@@ -1,7 +1,7 @@
 import React from 'react';
 import { Provider } from 'react-redux';
 import { store } from '../src/store';
-import { setRiskData } from '../src/features/riskSlice';
+import { setRiskData } from '../src/store/riskSlice';
 
 store.dispatch(setRiskData({
   companyId: 'acme-001',

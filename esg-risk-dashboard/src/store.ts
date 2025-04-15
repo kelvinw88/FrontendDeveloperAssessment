@@ -1,5 +1,5 @@
 import { configureStore } from '@reduxjs/toolkit';
-import riskReducer from './features/riskSlice';
+import riskReducer from './store/riskSlice';
 import { TypedUseSelectorHook, useDispatch, useSelector } from 'react-redux';
 
 export const store = configureStore({

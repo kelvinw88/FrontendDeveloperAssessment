@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import CompanyOverview from './CompanyOverview';
-import { RiskState } from '../../features/riskSlice';
+import { RiskState } from '../../store/riskSlice';
 
 describe('CompanyOverview', () => {
   const mockData: RiskState = {

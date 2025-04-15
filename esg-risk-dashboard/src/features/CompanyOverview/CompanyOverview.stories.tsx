@@ -1,6 +1,6 @@
 import React from 'react';
 import CompanyOverview from './CompanyOverview';
-import { RiskState } from '../../features/riskSlice';
+import { RiskState } from '../../store/riskSlice';
 
 export default {
   title: 'Components/CompanyOverview',

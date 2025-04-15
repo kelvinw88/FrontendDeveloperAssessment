@@ -1,7 +1,7 @@
 import React from 'react';
 import { Story, Meta } from '@storybook/react';
 import IncidentTimeline, { IncidentTimelineProps } from './IncidentTimeline'; 
-import { Incident, EsgCategory, SeverityLevel } from '../../features/riskSlice'; 
+import { Incident, EsgCategory, SeverityLevel } from '../../store/riskSlice'; 
 import { format, subDays } from 'date-fns';
 
 export default {

@@ -14,7 +14,8 @@ import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import IncidentModal from '../IncidentModal/IncidentModal';
-import { Incident, EsgCategory, SeverityLevel, RiskState } from '../../features/riskSlice';
+import { Incident, EsgCategory, SeverityLevel, RiskState } from '../../store/riskSlice';
+import "./styles.css";
 
 interface IncidentTimelineProps {
   incidents: Incident[];
@@ -268,12 +269,16 @@ const IncidentTimeline: React.FC<IncidentTimelineProps> = ({
   // Rendering logic based on loading and error states
   if (loadingIncidents) {
     return (
-      <Box sx={{ mb: 3, display: 'flex', alignItems: 'center' }} role="region" aria-label="Incident Timeline">
-        <Typography variant="h6" sx={{ mr: 2 }}>
-          Incident Timeline
-        </Typography>
-        <CircularProgress size={24} />
-      </Box>
+      <>
+        <Box sx={{ mb: 3, display: 'flex', alignItems: 'center' }} role="region" aria-label="Incident Timeline">
+          <Typography variant="h6" sx={{ mr: 2 }}>
+            Incident Timeline
+          </Typography>
+        </Box>
+        <Box sx={{ mb: 3, display: 'flex', alignItems: 'center' }} role="region" aria-label="Incident Timeline">
+          <CircularProgress size={24} />
+        </Box>
+      </>
     );
   }
 

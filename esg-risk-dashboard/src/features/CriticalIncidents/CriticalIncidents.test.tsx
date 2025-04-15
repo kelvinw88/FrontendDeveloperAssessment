@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, waitFor } from '@testing-library/react';
 import CriticalIncidents from '../CriticalIncidents/CriticalIncidents'; 
-import { CriticalIncident, Incident } from '../../features/riskSlice'; 
+import { CriticalIncident, Incident } from '../../store/riskSlice'; 
 import { format, subDays } from 'date-fns';
 
 const now = new Date();

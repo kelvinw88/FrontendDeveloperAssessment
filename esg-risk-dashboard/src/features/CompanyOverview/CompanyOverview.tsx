@@ -10,7 +10,7 @@ import {
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import TrendingFlatIcon from '@mui/icons-material/TrendingFlat';
-import { RiskState } from '../../features/riskSlice';
+import { RiskState } from '../../store/riskSlice';
 
 const getTrendIcon = (direction: string = '') => {
   switch (direction.toLowerCase()) {
