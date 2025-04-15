@@ -19,7 +19,7 @@ const handleResponse = async (response: Response) => {
 
 export const fetchRiskData = async (): Promise<Partial<RiskState>> => {
   await delay(3000);
-  if (simulateError(0.5)) {
+  if (simulateError(0.1)) {
     throw new Error('Simulated API failure for risk data');
   }
   const response = await fetch('/company-risk-overview.json');
@@ -68,7 +68,7 @@ export const fetchSeverityLevels = async (): Promise<SeverityLevel[]> => {
 
 export const fetchCriticalIncidents = async (): Promise<SeverityLevel[]> => {
   await delay(300);
-  if (simulateError(0.5)) {
+  if (simulateError(0.1)) {
     throw new Error('Simulated API failure for critical incidents');
   }
   const response = await fetch('/critical-incidents.json');

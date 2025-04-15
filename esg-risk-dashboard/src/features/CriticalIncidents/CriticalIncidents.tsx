@@ -6,7 +6,6 @@ import {
   CardContent,
   Chip,
   CircularProgress,
-  Alert,
   Grid,
   Tooltip,
   Button,
@@ -85,13 +84,24 @@ const CriticalIncidents: React.FC<CriticalIncidentsProps> = ({
   const now = new Date();
   const cutoffDate = subDays(now, DAYS_AGO_FOR_RECENCY);
 
-  const highlightedIncidents = criticalIncidents.filter((incident) => {
+  // First deduplicate incidents by ID
+  const deduplicatedIncidents = criticalIncidents.reduce((acc: CriticalIncident[], incident) => {
+    if (!acc.some((i) => i.id === incident.id)) {
+      acc.push(incident);
+    }
+    return acc;
+  }, []);
+
+  // Then apply filtering criteria
+  const highlightedIncidents = deduplicatedIncidents.filter((incident) => {
     try {
       const incidentDate = parseISO(incident.date);
       const isRecent = isAfter(incidentDate, cutoffDate);
       const isHighSeverity = HIGH_SEVERITY_RATINGS.includes(incident.severity?.toLowerCase());
       const isSignificantImpact = incident.riskScoreImpact >= SIGNIFICANT_IMPACT_THRESHOLD;
-      return isRecent || isHighSeverity || isSignificantImpact;
+      
+      // Only show incidents that are recent AND (high severity OR significant impact)
+      return isRecent && (isHighSeverity || isSignificantImpact);
     } catch (e) {
       console.error(`Error parsing date for incident ${incident.id}: ${incident.date}`, e);
       return false;
@@ -112,7 +122,7 @@ const CriticalIncidents: React.FC<CriticalIncidentsProps> = ({
 
       <Grid container spacing={2}>
         {highlightedIncidents.map((incident) => (
-          <Grid xs={12} sm={6} md={4} key={incident.id}>
+          <Grid item xs={12} sm={6} md={4} key={incident.id}>
             <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
               <CardContent sx={{ flexGrow: 1 }}>
                 <Typography variant="h6" component="h3" gutterBottom>
