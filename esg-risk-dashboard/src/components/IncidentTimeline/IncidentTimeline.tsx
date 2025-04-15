@@ -1,5 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useRef, useState, useCallback } from 'react';
 import * as d3 from 'd3';
 import {
   Box,
@@ -9,247 +8,270 @@ import {
   Select,
   MenuItem,
   TextField,
-  Card,
-  CardContent,
-  List,
-  ListItem,
-  ListItemText,
-  Divider,
   CircularProgress,
-  Modal,
-  Button,
 } from '@mui/material';
 import { DatePicker } from '@mui/x-date-pickers/DatePicker';
 import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
 import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
-import { RootState } from '../../store';
+import IncidentModal from '../IncidentModal/IncidentModal';
+import { Incident, EsgCategory, SeverityLevel, RiskState } from '../../features/riskSlice';
 
-interface Source {
-  title: string;
-  url: string;
-  publishDate: string;
+interface IncidentTimelineProps {
+  incidents: Incident[];
+  loadingIncidents: RiskState['loadingIncidents'];
+  errorIncidents: RiskState['errorIncidents'];
+  esgCategories: EsgCategory[];
+  severityLevels: SeverityLevel[];
 }
 
-interface Incident {
-  id: string;
-  title: string;
-  date: string;
-  category: string;
-  subcategory: string;
-  severity: string;
-  description: string;
-  detailedDescription: string;
-  location: string;
-  riskScoreImpact: { overall: number; environmental: number; social: number; governance: number };
-  sources: Source[];
-}
-
-
-
-
-
-const IncidentTimeline: React.FC = () => {
+const IncidentTimeline: React.FC<IncidentTimelineProps> = ({
+  incidents: propIncidents,
+  loadingIncidents,
+  errorIncidents,
+  esgCategories,
+  severityLevels,
+}) => {
+  // Ref for the SVG element
   const svgRef = useRef<SVGSVGElement>(null);
-  const {
-    incidents,
-    loadingIncidents,
-    errorIncidents,
-    esgCategories,
-    severityLevels
-  } = useSelector((state: RootState) => state.risk);
+  // State for filtering
   const [categoryFilter, setCategoryFilter] = useState<string>('');
   const [subcategoryFilter, setSubcategoryFilter] = useState<string>('');
   const [titleFilter, setTitleFilter] = useState<string>('');
   const [severityFilter, setSeverityFilter] = useState<string>('');
   const [dateRange, setDateRange] = useState<[Date | null, Date | null]>([null, null]);
+  // State for modal
   const [selectedIncident, setSelectedIncident] = useState<Incident | null>(null);
   const [openModal, setOpenModal] = useState(false);
 
+  // Function to handle opening the modal
+  const handleIncidentClick = useCallback((incident: Incident) => {
+    setSelectedIncident(incident);
+    setOpenModal(true);
+  }, []);
 
-  // Filter incidents
+  // Function to handle closing the modal
+  const handleCloseModal = useCallback(() => {
+    setOpenModal(false);
+  }, []);
+
+  // Filter incidents based on the selected criteria
   const filteredIncidents = React.useMemo(() => {
-    return incidents.filter((incident) => {
+    return propIncidents.filter((incident) => {
       const incidentDate = new Date(incident.date);
       const [startDate, endDate] = dateRange;
 
-      // Date filter
+      // Date filter: Check if the incident date falls within the selected range
       const inDateRange =
         (!startDate || incidentDate >= startDate) &&
         (!endDate || incidentDate <= endDate);
 
-      // Title filter
-      const inTitle = !titleFilter ||
-        incident.title.toLowerCase().includes(titleFilter.toLowerCase());
+      // Title filter: Check if the incident title includes the search term (case-insensitive)
+      const inTitle =
+        !titleFilter || incident.title.toLowerCase().includes(titleFilter.toLowerCase());
 
-      // Category filter
-      const inCategory = !categoryFilter ||
-        incident.category.toLowerCase() === categoryFilter.toLowerCase();
+      // Category filter: Check if the incident category matches the selected category
+      const inCategory =
+        !categoryFilter || incident.category.toLowerCase() === categoryFilter.toLowerCase();
 
-      // Subcategory filter
-      const inSubcategory = !subcategoryFilter ||
-        incident.subcategory.toLowerCase() === subcategoryFilter.toLowerCase();
+      // Subcategory filter: Check if the incident subcategory matches the selected subcategory
+      const inSubcategory =
+        !subcategoryFilter ||
+        (incident.subcategory && incident.subcategory.toLowerCase() === subcategoryFilter.toLowerCase());
 
-      // Severity filter
-      const inSeverity = !severityFilter ||
-        incident.severity.toLowerCase() === severityFilter.toLowerCase();
+      // Severity filter: Check if the incident severity matches the selected severity
+      const inSeverity =
+        !severityFilter || incident.severity.toLowerCase() === severityFilter.toLowerCase();
 
       return inDateRange && inTitle && inCategory && inSubcategory && inSeverity;
     });
-  }, [incidents, dateRange, titleFilter, categoryFilter, subcategoryFilter, severityFilter]);
+  }, [
+    propIncidents,
+    dateRange,
+    titleFilter,
+    categoryFilter,
+    subcategoryFilter,
+    severityFilter,
+  ]);
 
+  // Effect to draw the D3.js timeline
   useEffect(() => {
+    // Ensure SVG ref is available, there are incidents to display, and severity levels are loaded
     if (!svgRef.current || !filteredIncidents.length || !severityLevels.length) return;
 
     const svg = d3.select(svgRef.current);
-    svg.selectAll("*").remove(); // Clear previous elements
+    svg.selectAll('*').remove(); // Clear previous elements
 
     const width = 800;
     const height = 400;
     const margin = { top: 20, right: 120, bottom: 50, left: 50 };
 
-
     // Create a tooltip div
-    const tooltip = d3.select(svgRef.current.parentNode)
-      .append("div")
-      .attr("class", "tooltip")
-      .style("position", "absolute")
-      .style("visibility", "hidden")
-      .style("background", "white")
-      .style("border", "1px solid #ddd")
-      .style("border-radius", "4px")
-      .style("padding", "8px")
-      .style("font-size", "12px")
-      .style("pointer-events", "none");
+    const tooltip = d3
+      .select(svgRef.current.parentNode)
+      .append('div')
+      .attr('class', 'tooltip')
+      .style('position', 'absolute')
+      .style('visibility', 'hidden')
+      .style('background', 'white')
+      .style('border', '1px solid #ddd')
+      .style('border-radius', '4px')
+      .style('padding', '8px')
+      .style('font-size', '12px')
+      .style('pointer-events', 'none');
 
     // Scales
-    const x = d3.scaleTime()
-      .domain(d3.extent(filteredIncidents, d => new Date(d.date)) as [Date, Date])
+    const x = d3
+      .scaleTime()
+      .domain(d3.extent(filteredIncidents, (d) => new Date(d.date)) as [Date, Date])
       .range([margin.left, width - margin.right]);
 
-    const y = d3.scaleLinear()
-      .domain([0, d3.max(filteredIncidents, d => d.riskScoreImpact.overall) || 100])
+    const y = d3
+      .scaleLinear()
+      .domain([0, d3.max(filteredIncidents, (d) => d.riskScoreImpact.overall) || 100])
       .range([height - margin.bottom, margin.top]);
 
-    const color = d3.scaleOrdinal()
-      .domain(["environmental", "social", "governance"])
-      .range(["#4CAF50", "#2196F3", "#9C27B0"]);
+    const color = d3
+      .scaleOrdinal()
+      .domain(esgCategories.map((cat) => cat.id))
+      .range(['#4CAF50', '#2196F3', '#9C27B0']); // Ensure enough colors
 
-    const radius = d3.scaleSqrt()
+    const radius = d3
+      .scaleSqrt()
       .domain([1, severityLevels.length])
       .range([5, 15]);
 
-    // Draw bubbles with hover effects
-    svg.selectAll("circle")
+    // Draw bubbles for each incident
+    svg
+      .selectAll('circle')
       .data(filteredIncidents)
-      .join("circle")
-      .attr("cx", d => x(new Date(d.date)))
-      .attr("cy", d => y(d.riskScoreImpact.overall))
-      .attr("r", d => {
-        const sevIndex = severityLevels.findIndex(s => s.id === d.severity.toLowerCase());
-        return radius(sevIndex + 1);
+      .join('circle')
+      .attr('cx', (d) => x(new Date(d.date)))
+      .attr('cy', (d) => y(d.riskScoreImpact.overall))
+      .attr('r', (d) => {
+        const sevIndex = severityLevels.findIndex((s) => s.id.toLowerCase() === d.severity.toLowerCase());
+        return sevIndex !== -1 ? radius(sevIndex + 1) : radius(1); // Handle cases where severity might not be found
       })
-      .attr("fill", d => color(d.category))
-      .attr("stroke", "#fff")
-      .attr("stroke-width", 1)
-      .style("cursor", "pointer")
-      .style("opacity", 0.8)
-      .on("mouseover", function (event, d) {
-        d3.select(this)
-          .attr("stroke", "#000")
-          .attr("stroke-width", 2)
-          .style("opacity", 1);
+      .attr('fill', (d) => color(d.category))
+      .attr('stroke', '#fff')
+      .attr('stroke-width', 1)
+      .style('cursor', 'pointer')
+      .style('opacity', 0.8)
+      .on('mouseover', function (event, d) {
+        // Highlight the circle on mouseover
+        d3.select(this).attr('stroke', '#000').attr('stroke-width', 2).style('opacity', 1);
 
-        tooltip.html(`
+        // Show the tooltip with incident information
+        tooltip
+          .html(`
             <strong>${d.title}</strong>
             <div>${d.category} • ${d.severity}</div>
             <div>${new Date(d.date).toLocaleDateString()}</div>
             <div>Impact: ${d.riskScoreImpact.overall}</div>
           `)
-          .style("visibility", "visible");
+          .style('visibility', 'visible');
       })
-      .on("mousemove", function (event) {
-        tooltip
-          .style("top", (event.pageY - 10) + "px")
-          .style("left", (event.pageX + 10) + "px");
-      })
-      .on("mouseout", function () {
-        d3.select(this)
-          .attr("stroke", "#fff")
-          .attr("stroke-width", 1)
-          .style("opacity", 0.8);
+      .on('mousemove', function (event) {
+        // Get the bounding rectangle of the SVG element
+        const svgBounds = svgRef.current!.getBoundingClientRect();
+        // Calculate the relative position of the mouse within the SVG
+        const xPosition = event.clientX - svgBounds.left;
+        const yPosition = event.clientY - svgBounds.top;
 
-        tooltip.style("visibility", "hidden");
+        // Update tooltip position based on the mouse position relative to the SVG
+        tooltip
+          .style('top', yPosition + 10 + 'px')
+          .style('left', xPosition + 10 + 'px');
+      })
+      .on('mouseout', function () {
+        // Revert the circle style on mouseout
+        d3.select(this).attr('stroke', '#fff').attr('stroke-width', 1).style('opacity', 0.8);
+
+        // Hide the tooltip on mouseout
+        tooltip.style('visibility', 'hidden');
       })
       .on('click', (event, d) => {
-        setSelectedIncident(d);
-        setOpenModal(true); // Open modal on click
+        // Open the incident modal on click
+        handleIncidentClick(d);
       });
 
     // Add X axis
-    svg.append("g")
-      .attr("transform", `translate(0,${height - margin.bottom})`)
-      .call(d3.axisBottom(x).tickFormat(d3.timeFormat("%Y-%m-%d")));
+    svg
+      .append('g')
+      .attr('transform', `translate(0,${height - margin.bottom})`)
+      .call(d3.axisBottom(x).tickFormat(d3.timeFormat('%Y-%m-%d')));
 
     // Add Y axis
-    svg.append("g")
-      .attr("transform", `translate(${margin.left},0)`)
-      .call(d3.axisLeft(y));
-    // Add y-axis label
-    svg.append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 0 - margin.left)
-      .attr("x", 0 - (height / 2))
-      .attr("dy", "1em")
-      .style("text-anchor", "middle")
-      .text("Risk Score Impact");
+    svg.append('g').attr('transform', `translate(${margin.left},0)`).call(d3.axisLeft(y));
 
-    svg.attr("aria-label", "Incident timeline visualization");
-    svg.selectAll("circle")
-      .attr("aria-label", d => `${d.title}, ${d.severity} severity`);
+    // Add y-axis label
+    svg
+      .append('text')
+      .attr('transform', 'rotate(-90)')
+      .attr('y', 0 - margin.left)
+      .attr('x', 0 - height / 2)
+      .attr('dy', '1em')
+      .style('text-anchor', 'middle')
+      .text('Risk Score Impact');
+
+    // Accessibility attributes for the SVG
+    svg.attr('aria-label', 'Incident timeline visualization');
+    svg.selectAll('circle').attr('aria-label', (d) => `${d.title}, ${d.severity} severity`);
+
     // Add legend for categories
-    const categoryLegend = svg.append("g")
-      .attr("transform", `translate(${width - margin.right + 20}, ${margin.top})`);
+    const categoryLegend = svg
+      .append('g')
+      .attr('transform', `translate(${width - margin.right + 20}, ${margin.top})`);
 
     esgCategories.forEach((category, i) => {
-      categoryLegend.append("circle")
-        .attr("cx", 0)
-        .attr("cy", i * 20)
-        .attr("r", 5)
-        .attr("fill", color(category.id));
+      categoryLegend
+        .append('circle')
+        .attr('cx', 0)
+        .attr('cy', i * 20)
+        .attr('r', 5)
+        .attr('fill', color(category.id));
 
-      categoryLegend.append("text")
-        .attr("x", 10)
-        .attr("y", i * 20 + 5)
+      categoryLegend
+        .append('text')
+        .attr('x', 10)
+        .attr('y', i * 20 + 5)
         .text(category.name)
-        .style("font-size", "12px");
+        .style('font-size', '12px');
     });
 
-    // Add legend for severity
-    const severityLegend = svg.append("g")
-      .attr("transform", `translate(${width - margin.right + 20}, ${margin.top + esgCategories.length * 20 + 20})`);
+    // Add legend for severity levels
+    const severityLegend = svg
+      .append('g')
+      .attr(
+        'transform',
+        `translate(${width - margin.right + 20}, ${margin.top + esgCategories.length * 20 + 20})`,
+      );
 
     severityLevels.forEach((level, i) => {
-      severityLegend.append("circle")
-        .attr("cx", 0)
-        .attr("cy", i * 20)
-        .attr("r", radius(i + 1))
-        .attr("fill", "#000")
-        .attr("stroke", "#000")
-        .attr("stroke-width", 0.5);
+      severityLegend
+        .append('circle')
+        .attr('cx', 0)
+        .attr('cy', i * 20)
+        .attr('r', radius(i + 1))
+        .attr('fill', '#000')
+        .attr('stroke', '#000')
+        .attr('stroke-width', 0.5);
 
-      severityLegend.append("text")
-        .attr("x", 20)
-        .attr("y", i * 20 + 5)
+      severityLegend
+        .append('text')
+        .attr('x', 20)
+        .attr('y', i * 20 + 5)
         .text(level.name)
-        .style("font-size", "12px");
+        .style('font-size', '12px');
     });
+  }, [filteredIncidents, severityLevels, esgCategories, handleIncidentClick]);
 
-  }, [filteredIncidents, severityLevels, esgCategories]);
-
+  // Rendering logic based on loading and error states
   if (loadingIncidents) {
     return (
-      <Box sx={{ mb: 3 }} role="region" aria-label="Incident Timeline">
-        <Typography variant="h6">Incident Timeline</Typography>
+      <Box sx={{ mb: 3, display: 'flex', alignItems: 'center' }} role="region" aria-label="Incident Timeline">
+        <Typography variant="h6" sx={{ mr: 2 }}>
+          Incident Timeline
+        </Typography>
         <CircularProgress size={24} />
       </Box>
     );
@@ -267,8 +289,11 @@ const IncidentTimeline: React.FC = () => {
   return (
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Box sx={{ mb: 3 }} role="region" aria-label="Incident Timeline">
-        <Typography variant="h6">Incident Timeline</Typography>
-        <Box sx={{ display: 'flex', gap: 2, mb: 2, flexWrap: 'wrap' }}>
+        <Typography variant="h6" sx={{ mb: 2 }}>
+          Incident Timeline
+        </Typography>
+        {/* Filter controls */}
+        <Box sx={{ display: 'flex', gap: 2, mb: 2, flexWrap: 'wrap', alignItems: 'center' }}>
           {/* Title filter */}
           <TextField
             label="Title"
@@ -282,7 +307,7 @@ const IncidentTimeline: React.FC = () => {
           />
 
           {/* Category filter */}
-          <FormControl sx={{ minWidth: 120 }}>
+          <FormControl sx={{ minWidth: 150 }}>
             <InputLabel id="category-filter-label">Category</InputLabel>
             <Select
               labelId="category-filter-label"
@@ -306,7 +331,7 @@ const IncidentTimeline: React.FC = () => {
 
           {/* Subcategory filter (only shown when a category is selected) */}
           {categoryFilter && (
-            <FormControl sx={{ minWidth: 120 }}>
+            <FormControl sx={{ minWidth: 150 }}>
               <InputLabel id="subcategory-filter-label">Subcategory</InputLabel>
               <Select
                 labelId="subcategory-filter-label"
@@ -320,8 +345,8 @@ const IncidentTimeline: React.FC = () => {
               >
                 <MenuItem value="">All Subcategories</MenuItem>
                 {esgCategories
-                  .find(c => c.id === categoryFilter)
-                  ?.subcategories.map((subcategory) => (
+                  .find((c) => c.id === categoryFilter)
+                  ?.subcategories?.map((subcategory) => (
                     <MenuItem key={subcategory.id} value={subcategory.id}>
                       {subcategory.name}
                     </MenuItem>
@@ -331,7 +356,7 @@ const IncidentTimeline: React.FC = () => {
           )}
 
           {/* Severity filter */}
-          <FormControl sx={{ minWidth: 120 }}>
+          <FormControl sx={{ minWidth: 150 }}>
             <InputLabel id="severity-filter-label">Severity</InputLabel>
             <Select
               labelId="severity-filter-label"
@@ -361,6 +386,7 @@ const IncidentTimeline: React.FC = () => {
               setSelectedIncident(null);
             }}
             slotProps={{ textField: { size: 'small' } }}
+            sx={{ minWidth: 150 }}
           />
           <DatePicker
             label="End Date"
@@ -370,132 +396,23 @@ const IncidentTimeline: React.FC = () => {
               setSelectedIncident(null);
             }}
             slotProps={{ textField: { size: 'small' } }}
+            sx={{ minWidth: 150 }}
           />
         </Box>
-        {filteredIncidents.length ? (
-          <Box>
+
+        {/* Conditional rendering of the timeline or a message if no incidents match */}
+        {filteredIncidents.length > 0 ? (
+          <Box sx={{ position: 'relative' }}>
             <svg ref={svgRef} width="800" height="400"></svg>
-            {/* Modal for Incident Details */}
-            <Modal
+            {/* Incident modal */}
+            <IncidentModal
+              incident={selectedIncident}
               open={openModal}
-              onClose={() => setOpenModal(false)}
-              aria-labelledby="incident-details-modal"
-              aria-describedby="incident-details-description"
-            >
-              <Box
-                sx={{
-                  position: 'absolute',
-                  top: '50%',
-                  left: '50%',
-                  transform: 'translate(-50%, -50%)',
-                  width: 400,
-                  height: '70vh',
-                  bgcolor: 'background.paper',
-                  boxShadow: 24,
-                  overflow: 'auto',
-                  p: 4,
-                }}
-              >
-                {selectedIncident && (
-                  <>
-                    <Typography id="incident-details-modal" variant="h6" component="h2">
-                      Incident Details
-                    </Typography>
-                    <List dense>
-                      <ListItem>
-                        <ListItemText primary="ID" secondary={selectedIncident.id} />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemText primary="Title" secondary={selectedIncident.title} />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemText
-                          primary="Date"
-                          secondary={new Date(selectedIncident.date).toLocaleString()}
-                        />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemText primary="Category" secondary={selectedIncident.category} />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemText
-                          primary="Subcategory"
-                          secondary={selectedIncident.subcategory}
-                        />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemText primary="Severity" secondary={selectedIncident.severity} />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemText
-                          primary="Description"
-                          secondary={selectedIncident.description}
-                        />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemText
-                          primary="Detailed Description"
-                          secondary={selectedIncident.detailedDescription}
-                        />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemText primary="Location" secondary={selectedIncident.location} />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemText
-                          primary="Risk Score Impact"
-                          secondary={
-                            <>
-                              Overall: {selectedIncident.riskScoreImpact.overall}
-                              <br />
-                              Environmental: {selectedIncident.riskScoreImpact.environmental}
-                              <br />
-                              Social: {selectedIncident.riskScoreImpact.social}
-                              <br />
-                              Governance: {selectedIncident.riskScoreImpact.governance}
-                            </>
-                          }
-                        />
-                      </ListItem>
-                      <ListItem>
-                        <ListItemText
-                          primary="Sources"
-                          secondary={
-                            selectedIncident.sources.length ? (
-                              <List dense>
-                                {selectedIncident.sources.map((source, i) => (
-                                  <ListItem key={i}>
-                                    <ListItemText
-                                      primary={source.title}
-                                      secondary={
-                                        <>
-                                          <a href={source.url} target="_blank" rel="noopener">
-                                            {source.url}
-                                          </a>
-                                          <br />
-                                          Published:{' '}
-                                          {new Date(source.publishDate).toLocaleString()}
-                                        </>
-                                      }
-                                    />
-                                  </ListItem>
-                                ))}
-                              </List>
-                            ) : (
-                              'None'
-                            )
-                          }
-                        />
-                      </ListItem>
-                    </List>
-                    <Button onClick={() => setOpenModal(false)}>Close</Button>
-                  </>
-                )}
-              </Box>
-            </Modal>
+              onClose={handleCloseModal}
+            />
           </Box>
         ) : (
-          <Typography>No incidents match the filters.</Typography>
+          <Typography>No incidents match the current filters.</Typography>
         )}
       </Box>
     </LocalizationProvider>

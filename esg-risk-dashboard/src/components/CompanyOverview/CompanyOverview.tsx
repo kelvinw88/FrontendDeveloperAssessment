@@ -1,6 +1,4 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store';
 import {
   Card,
   CardContent,
@@ -12,116 +10,119 @@ import {
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
 import TrendingFlatIcon from '@mui/icons-material/TrendingFlat';
+import { RiskState } from '../../features/riskSlice';
 
-const CompanyOverview: React.FC = () => {
-  const {
-    companyId,
-    companyName,
-    overallRiskScore,
-    trend,
-    lastUpdated,
-    categories,
-    loadingRiskData,
-    errorRiskData,
-  } = useSelector((state: RootState) => state.risk);
-
-  const getTrendIcon = (direction: string) => {
-    switch (direction.toLowerCase()) {
-      case 'increasing':
-        return <ArrowUpwardIcon color="error" fontSize="small" />;
-      case 'decreasing':
-        return <ArrowDownwardIcon color="success" fontSize="small" />;
-      default:
-        return <TrendingFlatIcon color="action" fontSize="small" />;
-    }
-  };
-
-  const getScoreColor = (score: number) => {
-    if (score > 70) return 'error.main';
-    if (score > 50) return 'warning.main';
-    return 'success.main';
-  };
-
-  if (loadingRiskData) {
-    return (
-      <Card sx={{ mb: 3 }} role="region" aria-label="Company Risk Overview">
-        <CardContent>
-          <Typography variant="h6" gutterBottom>
-            Company Risk Overview
-          </Typography>
-          <CircularProgress size={24} />
-        </CardContent>
-      </Card>
-    );
+const getTrendIcon = (direction: string = '') => {
+  switch (direction.toLowerCase()) {
+    case 'increasing':
+      return <ArrowUpwardIcon color="error" fontSize="small" />;
+    case 'decreasing':
+      return <ArrowDownwardIcon color="success" fontSize="small" />;
+    default:
+      return <TrendingFlatIcon color="action" fontSize="small" />;
   }
+};
 
-  if (errorRiskData) {
+const getScoreColor = (score: number = 0) => {
+  if (score > 70) return 'error.main';
+  if (score > 50) return 'warning.main';
+  return 'success.main';
+};
+
+
+const CategoryItem = ({ label, score, trend, changePercentage }) => (
+  <Grid xs={12} sm={4}>
+    <Typography variant="body1" color="textSecondary">
+      {label}
+    </Typography>
+    <Typography variant="body1" color={score ? getScoreColor(score) : 'textPrimary'}>
+      Score: {score ?? 'N/A'}
+    </Typography>
+    <Box display="flex" alignItems="center" gap={1}>
+      {getTrendIcon(trend)}
+      <Typography variant="body2">
+        {trend ? `${trend} by ${changePercentage ?? 0}%` : 'N/A'}
+      </Typography>
+    </Box>
+  </Grid>
+);
+
+const CompanyOverview: React.FC<Partial<RiskState>> = ({
+  companyId,
+  companyName,
+  overallRiskScore,
+  trend,
+  lastUpdated,
+  categories,
+  loadingRiskData,
+  errorRiskData,
+}) => {
+  if (loadingRiskData || errorRiskData) {
     return (
       <Card sx={{ mb: 3 }} role="region" aria-label="Company Risk Overview">
         <CardContent>
           <Typography variant="h6" gutterBottom>
             Company Risk Overview
           </Typography>
-          <Typography color="error">{errorRiskData}</Typography>
+          {loadingRiskData ? (
+            <CircularProgress size={24} />
+          ) : (
+            <Typography color="error">{errorRiskData}</Typography>
+          )}
         </CardContent>
       </Card>
     );
   }
 
   return (
-    <Card
-      sx={{ mb: 3 }}
-      role="region"
-      aria-label="Company Risk Overview"
-      elevation={2}
-    >
+    <Card sx={{ mb: 3 }} role="region" aria-label="Company Risk Overview" elevation={2}>
       <CardContent>
         <Typography variant="h6" gutterBottom>
           Company Risk Overview
         </Typography>
         <Grid container spacing={2}>
-          <Grid item xs={12} sm={6}>
-            <Typography variant="body1" color="textSecondary">
-              Company Name
-            </Typography>
-            <Typography variant="body1" fontWeight="bold">
-              {companyName || 'N/A'}
-            </Typography>
-          </Grid>
-          <Grid item xs={12} sm={6}>
-            <Typography variant="body1" color="textSecondary">
-              Company ID
-            </Typography>
-            <Typography variant="body1" fontWeight="bold">
-              {companyId || 'N/A'}
-            </Typography>
-          </Grid>
-          <Grid item xs={12} sm={6}>
+          {[
+            { label: 'Company Name', value: companyName },
+            { label: 'Company ID', value: companyId },
+          ].map(({ label, value }) => (
+            <Grid xs={12} sm={6} key={label}>
+              <Typography variant="body1" color="textSecondary">
+                {label}
+              </Typography>
+              <Typography variant="body1" fontWeight="bold">
+                {value || 'N/A'}
+              </Typography>
+            </Grid>
+          ))}
+
+          <Grid xs={12} sm={6}>
             <Typography variant="body1" color="textSecondary">
               Overall Risk Score
             </Typography>
             <Typography
               variant="h5"
-              color={getScoreColor(overallRiskScore)}
+              color={getScoreColor(overallRiskScore ?? 0)}
               aria-label={`Overall risk score: ${overallRiskScore}`}
             >
-              {overallRiskScore || 0}
+              {overallRiskScore ?? 0}
             </Typography>
           </Grid>
-          <Grid item xs={12} sm={6}>
+
+          <Grid xs={12} sm={6}>
             <Typography variant="body1" color="textSecondary">
               Trend
             </Typography>
             <Box display="flex" alignItems="center" gap={1}>
-              {getTrendIcon(trend?.direction || '')}
+              {getTrendIcon(trend?.direction)}
               <Typography variant="body1">
                 {trend?.direction
-                  ? `${trend.direction} by ${trend.percentage || 0}%`
+                  ? `${trend.direction} by ${trend.percentage ?? 0}%`
                   : 'N/A'}
               </Typography>
             </Box>
           </Grid>
-          <Grid item xs={12}>
+
+          <Grid xs={12}>
             <Typography variant="body1" color="textSecondary">
               Last Updated
             </Typography>
@@ -132,36 +133,16 @@ const CompanyOverview: React.FC = () => {
             </Typography>
           </Grid>
         </Grid>
+
         <Box sx={{ my: 2, borderBottom: 1, borderColor: 'divider' }} />
         <Typography variant="subtitle1" gutterBottom>
           ESG Categories
         </Typography>
+
         <Grid container spacing={2}>
-          {[
-            { name: 'Environmental', data: categories?.environmental },
-            { name: 'Social', data: categories?.social },
-            { name: 'Governance', data: categories?.governance },
-          ].map(({ name, data }) => (
-            <Grid item xs={12} sm={4} key={name}>
-              <Typography variant="body1" color="textSecondary">
-                {name}
-              </Typography>
-              <Typography
-                variant="body1"
-                color={data?.score ? getScoreColor(data.score) : 'textPrimary'}
-              >
-                Score: {data?.score ?? 'N/A'}
-              </Typography>
-              <Box display="flex" alignItems="center" gap={1}>
-                {getTrendIcon(data?.trend || '')}
-                <Typography variant="body2">
-                  {data?.trend
-                    ? `${data.trend} by ${data.changePercentage || 0}%`
-                    : 'N/A'}
-                </Typography>
-              </Box>
-            </Grid>
-          ))}
+          <CategoryItem label="Environmental" {...categories?.environmental} />
+          <CategoryItem label="Social" {...categories?.social} />
+          <CategoryItem label="Governance" {...categories?.governance} />
         </Grid>
       </CardContent>
     </Card>

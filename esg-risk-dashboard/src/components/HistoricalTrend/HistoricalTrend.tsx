@@ -1,14 +1,24 @@
 import React, { useEffect, useRef } from 'react';
-import { useSelector } from 'react-redux';
 import * as d3 from 'd3';
-import { RootState } from '../store';
 import { Box, Typography, CircularProgress } from '@mui/material';
+import { HistoricalData } from '../../features/riskSlice';
 
-const HistoricalTrend: React.FC = () => {
+interface HistoricalTrendProps {
+  data: HistoricalData[];
+  loading?: boolean;
+  error?: string | null;
+  width?: number;
+  height?: number;
+}
+
+const HistoricalTrend: React.FC<HistoricalTrendProps> = ({
+  data = [],
+  loading = false,
+  error = null,
+  width = 600,
+  height = 400,
+}) => {
   const svgRef = useRef<SVGSVGElement>(null);
-  const { historicalData, loadingHistoricalData, errorHistoricalData } = useSelector(
-    (state: RootState) => state.risk
-  );
 
   const metrics = [
     { key: 'overall', color: 'steelblue', label: 'Overall' },
@@ -18,23 +28,21 @@ const HistoricalTrend: React.FC = () => {
   ];
 
   useEffect(() => {
-    if (!svgRef.current || !historicalData.length) return;
+    if (!svgRef.current || !data.length) return;
 
     const svg = d3.select(svgRef.current);
-    const width = 600;
-    const height = 400;
     const margin = { top: 20, right: 120, bottom: 50, left: 50 };
 
     const xScale = d3
       .scaleTime()
-      .domain(d3.extent(historicalData, (d) => new Date(d.date)) as [Date, Date])
+      .domain(d3.extent(data, (d) => new Date(d.date)) as [Date, Date])
       .range([margin.left, width - margin.right]);
 
     const yScale = d3
       .scaleLinear()
       .domain([
         0,
-        d3.max(historicalData, (d) =>
+        d3.max(data, (d) =>
           Math.max(d.overall, d.environmental, d.social, d.governance)
         ) || 100,
       ])
@@ -43,7 +51,7 @@ const HistoricalTrend: React.FC = () => {
 
     svg.selectAll('*').remove();
 
-    // Plot lines for each metric
+    
     metrics.forEach(({ key, color }) => {
       const line = d3
         .line()
@@ -52,7 +60,7 @@ const HistoricalTrend: React.FC = () => {
 
       svg
         .append('path')
-        .datum(historicalData)
+        .datum(data)
         .attr('fill', 'none')
         .attr('stroke', color)
         .attr('stroke-width', 2)
@@ -60,21 +68,21 @@ const HistoricalTrend: React.FC = () => {
         .attr('aria-label', `${key} trend line`);
     });
 
-    // X-axis
+    
     svg
       .append('g')
       .attr('transform', `translate(0, ${height - margin.bottom})`)
       .call(d3.axisBottom(xScale).tickFormat(d3.timeFormat('%b %Y')))
       .attr('aria-hidden', 'true');
 
-    // Y-axis
+    
     svg
       .append('g')
       .attr('transform', `translate(${margin.left}, 0)`)
       .call(d3.axisLeft(yScale))
       .attr('aria-hidden', 'true');
 
-    // Legend
+    
     const legend = svg
       .append('g')
       .attr('transform', `translate(${width - margin.right + 20}, ${margin.top})`);
@@ -98,9 +106,9 @@ const HistoricalTrend: React.FC = () => {
         .attr('font-size', '12px')
         .text(label);
     });
-  }, [historicalData]);
+  }, [data, width, height]);
 
-  if (loadingHistoricalData) {
+  if (loading) {
     return (
       <Box sx={{ mb: 3 }} role="region" aria-label="Historical Risk Trend">
         <Typography variant="h6">Historical Risk Trend</Typography>
@@ -109,11 +117,11 @@ const HistoricalTrend: React.FC = () => {
     );
   }
 
-  if (errorHistoricalData) {
+  if (error) {
     return (
       <Box sx={{ mb: 3 }} role="region" aria-label="Historical Risk Trend">
         <Typography variant="h6">Historical Risk Trend</Typography>
-        <Typography color="error">{errorHistoricalData}</Typography>
+        <Typography color="error">{error}</Typography>
       </Box>
     );
   }
@@ -121,7 +129,7 @@ const HistoricalTrend: React.FC = () => {
   return (
     <Box sx={{ mb: 3 }} role="region" aria-label="Historical Risk Trend">
       <Typography variant="h6">Historical Risk Trend</Typography>
-      <svg ref={svgRef} width="600" height="400"></svg>
+      <svg ref={svgRef} width={width} height={height}></svg>
     </Box>
   );
 };

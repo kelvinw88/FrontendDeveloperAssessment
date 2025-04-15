@@ -16,8 +16,9 @@ interface Incident {
   description: string;
   detailedDescription: string;
   location: string;
-  riskScoreImpact: { overall: number; environmental: number; social: number; governance: number };
-  sources: Array<{ title: string; url: string; publishDate: string }>;
+  riskScoreImpact: { overall: number; environmental: number; social: number; governance: number } | number;
+  sources?: Array<{ title: string; url: string; publishDate: string }>;
+  summary?: string;
 }
 
 interface HistoricalData {
@@ -46,6 +47,17 @@ interface SeverityLevel {
   color: string;
 }
 
+interface CriticalIncident {
+  id: string;
+  title: string;
+  date: string;
+  category: string;
+  severity: string;
+  description: string;
+  location: string;
+  riskScoreImpact: number;
+  summary: string;
+}
 
 interface RiskState {
   companyId: string;
@@ -60,18 +72,21 @@ interface RiskState {
   };
   incidents: Incident[];
   historicalData: HistoricalData[];
+  esgCategories: EsgCategory[];
+  severityLevels: SeverityLevel[];
   loadingRiskData: boolean;
   loadingIncidents: boolean;
   loadingHistoricalData: boolean;
+  loadingEsgCategories: boolean;
+  loadingSeverityLevels: boolean;
   errorRiskData: string | null;
   errorIncidents: string | null;
   errorHistoricalData: string | null;
-  esgCategories: EsgCategory[];
-  severityLevels: SeverityLevel[];
-  loadingEsgCategories: boolean;
-  loadingSeverityLevels: boolean;
   errorEsgCategories: string | null;
   errorSeverityLevels: string | null;
+  criticalIncidents: CriticalIncident[];
+  loadingCriticalIncidents: boolean;
+  errorCriticalIncidents: string | null;
 }
 
 const initialState: RiskState = {
@@ -87,19 +102,23 @@ const initialState: RiskState = {
   },
   incidents: [],
   historicalData: [],
+  esgCategories: [],
+  severityLevels: [],
   loadingRiskData: false,
   loadingIncidents: false,
   loadingHistoricalData: false,
+  loadingEsgCategories: false,
+  loadingSeverityLevels: false,
   errorRiskData: null,
   errorIncidents: null,
   errorHistoricalData: null,
-  esgCategories: [],
-  severityLevels: [],
-  loadingEsgCategories: false,
-  loadingSeverityLevels: false,
   errorEsgCategories: null,
   errorSeverityLevels: null,
+  criticalIncidents: [],
+  loadingCriticalIncidents: false,
+  errorCriticalIncidents: null,
 };
+
 
 const riskSlice = createSlice({
   name: 'risk',
@@ -148,6 +167,15 @@ const riskSlice = createSlice({
       state.loadingSeverityLevels = false;
       state.errorSeverityLevels = action.payload;
     },
+    setLoadingCriticalIncidents: (state) => {
+      state.loadingCriticalIncidents = true;
+      state.errorCriticalIncidents = null;
+    },
+    setErrorCriticalIncidents: (state, action: PayloadAction<string>) => {
+      state.loadingCriticalIncidents = false;
+      state.errorCriticalIncidents = action.payload;
+    },
+
   },
 });
 
@@ -163,6 +191,17 @@ export const {
   setErrorEsgCategories,
   setLoadingSeverityLevels,
   setErrorSeverityLevels,
+  setLoadingCriticalIncidents,
+  setErrorCriticalIncidents,
 } = riskSlice.actions;
+
 export default riskSlice.reducer;
-export type { RiskState, Incident, HistoricalData, SeverityLevel, EsgCategory };
+export { initialState };
+export type {
+  RiskState,
+  Incident,
+  HistoricalData,
+  SeverityLevel,
+  EsgCategory,
+  CriticalIncident
+};

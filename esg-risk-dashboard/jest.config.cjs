@@ -8,4 +8,7 @@ module.exports = {
   moduleNameMapper: {
     '\\.(css|less)$': 'identity-obj-proxy',
   },
+  transformIgnorePatterns: [
+    '<rootDir>/node_modules/(?!d3|internmap|delaunator|robust-predicates)'
+  ],
 };

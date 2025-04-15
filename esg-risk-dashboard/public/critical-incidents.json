@@ -32,7 +32,7 @@
             "severity": "critical",
             "description": "Customer data breach affecting 100,000+ users",
             "location": "Global",
-            "riskScoreImpact": 12.7,
+            "riskScoreImpact": 9.7,
             "summary": "A major data breach exposed sensitive customer information, triggering regulatory investigations in multiple jurisdictions."
         },
         {
